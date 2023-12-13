@@ -5,10 +5,10 @@
 #endif // DEBUG
 #define DEBUG(x) std::cout << x << "\n"
 
-ProgramManager::ProgramManager(chip8cpu& cpu, Memory& mem)
-	: m_cpu(cpu), m_memory(mem) {}
+ProgramManager::ProgramManager(chip8cpu& cpu, Memory& mem, DisplayManager& display, KeyboardManager& keyboard)
+	: m_cpu(cpu), m_memory(mem), m_display(display), m_keyboard(keyboard) {}
 
-#pragma region Public Methods
+
 void ProgramManager::loadProgram(const char* file_path)
 {
 	if (!checkExtension(file_path))
@@ -26,7 +26,7 @@ void ProgramManager::loadProgram(const char* file_path)
 		return;
 	}
 
-	for (int i = 0; (RAM_START + i) < MEM_SIZE && i < static_cast<int>(buffer.second); i++)
+	for (int i = 0; (RAM_START + i) < MEM_SIZE && i < buffer.second; i++)
 	{
 		m_memory.setByte(RAM_START + i, buffer.first[i]);
 	}
@@ -105,67 +105,67 @@ void ProgramManager::runProgram()
 
 
 				case SDLK_1:
-					DisplayAndKeyboard_Manager::keymap[0x01] = true;
+					m_keyboard.keymap[0x01] = true;
 					break;
 
 				case SDLK_2:
-					DisplayAndKeyboard_Manager::keymap[0x02] = true;
+					m_keyboard.keymap[0x02] = true;
 					break;
 
 				case SDLK_3:
-					DisplayAndKeyboard_Manager::keymap[0x03] = true;
+					m_keyboard.keymap[0x03] = true;
 					break;
 
 				case SDLK_4:
-					DisplayAndKeyboard_Manager::keymap[0x0C] = true;
+					m_keyboard.keymap[0x0C] = true;
 					break;
 
 				case SDLK_q:
-					DisplayAndKeyboard_Manager::keymap[0x04] = true;
+					m_keyboard.keymap[0x04] = true;
 					break;
 
 				case SDLK_w:
-					DisplayAndKeyboard_Manager::keymap[0x05] = true;
+					m_keyboard.keymap[0x05] = true;
 					break;
 
 				case SDLK_e:
-					DisplayAndKeyboard_Manager::keymap[0x06] = true;
+					m_keyboard. keymap[0x06] = true;
 					break;
 
 				case SDLK_r:
-					DisplayAndKeyboard_Manager::keymap[0x0D] = true;
+					m_keyboard.keymap[0x0D] = true;
 					break;
 
 				case SDLK_a:
-					DisplayAndKeyboard_Manager::keymap[0x07] = true;
+					m_keyboard.keymap[0x07] = true;
 					break;
 
 				case SDLK_s:
-					DisplayAndKeyboard_Manager::keymap[0x08] = true;
+					m_keyboard.keymap[0x08] = true;
 					break;
 
 				case SDLK_d:
-					DisplayAndKeyboard_Manager::keymap[0x09] = true;
+					m_keyboard.keymap[0x09] = true;
 					break;
 
 				case SDLK_f:
-					DisplayAndKeyboard_Manager::keymap[0x0E] = true;
+					m_keyboard.keymap[0x0E] = true;
 					break;
 
 				case SDLK_z:
-					DisplayAndKeyboard_Manager::keymap[0x0A] = true;
+					m_keyboard.keymap[0x0A] = true;
 					break;
 
 				case SDLK_x:
-					DisplayAndKeyboard_Manager::keymap[0x00] = true;
+					m_keyboard.keymap[0x00] = true;
 					break;
 
 				case SDLK_c:
-					DisplayAndKeyboard_Manager::keymap[0x0B] = true;
+					m_keyboard.keymap[0x0B] = true;
 					break;
 
 				case SDLK_v:
-					DisplayAndKeyboard_Manager::keymap[0x0F] = true;
+					m_keyboard.keymap[0x0F] = true;
 					break;
 
 				default:
@@ -180,67 +180,67 @@ void ProgramManager::runProgram()
 				switch (windowEvent.key.keysym.sym)
 				{
 				case SDLK_1:
-					DisplayAndKeyboard_Manager::keymap[0x01] = false;
+					m_keyboard.keymap[0x01] = false;
 					break;
 
 				case SDLK_2:
-					DisplayAndKeyboard_Manager::keymap[0x02] = false;
+					m_keyboard.keymap[0x02] = false;
 					break;
 
 				case SDLK_3:
-					DisplayAndKeyboard_Manager::keymap[0x03] = false;
+					m_keyboard.keymap[0x03] = false;
 					break;
 
 				case SDLK_4:
-					DisplayAndKeyboard_Manager::keymap[0x0C] = false;
+					m_keyboard.keymap[0x0C] = false;
 					break;
 
 				case SDLK_q:
-					DisplayAndKeyboard_Manager::keymap[0x04] = false;
+					m_keyboard.keymap[0x04] = false;
 					break;
 
 				case SDLK_w:
-					DisplayAndKeyboard_Manager::keymap[0x05] = false;
+					m_keyboard.keymap[0x05] = false;
 					break;
 
 				case SDLK_e:
-					DisplayAndKeyboard_Manager::keymap[0x06] = false;
+					m_keyboard.keymap[0x06] = false;
 					break;
 
 				case SDLK_r:
-					DisplayAndKeyboard_Manager::keymap[0x0D] = false;
+					m_keyboard.keymap[0x0D] = false;
 					break;
 
 				case SDLK_a:
-					DisplayAndKeyboard_Manager::keymap[0x07] = false;
+					m_keyboard.keymap[0x07] = false;
 					break;
 
 				case SDLK_s:
-					DisplayAndKeyboard_Manager::keymap[0x08] = false;
+					m_keyboard.keymap[0x08] = false;
 					break;
 
 				case SDLK_d:
-					DisplayAndKeyboard_Manager::keymap[0x09] = false;
+					m_keyboard.keymap[0x09] = false;
 					break;
 
 				case SDLK_f:
-					DisplayAndKeyboard_Manager::keymap[0x0E] = false;
+					m_keyboard.keymap[0x0E] = false;
 					break;
 
 				case SDLK_z:
-					DisplayAndKeyboard_Manager::keymap[0x0A] = false;
+					m_keyboard.keymap[0x0A] = false;
 					break;
 
 				case SDLK_x:
-					DisplayAndKeyboard_Manager::keymap[0x00] = false;
+					m_keyboard.keymap[0x00] = false;
 					break;
 
 				case SDLK_c:
-					DisplayAndKeyboard_Manager::keymap[0x0B] = false;
+					m_keyboard.keymap[0x0B] = false;
 					break;
 
 				case SDLK_v:
-					DisplayAndKeyboard_Manager::keymap[0x0F] = false;
+					m_keyboard.keymap[0x0F] = false;
 					break;
 
 				default:
@@ -251,22 +251,22 @@ void ProgramManager::runProgram()
 #pragma endregion
 
 			case SDL_DROPFILE:
-				SDL_SetRenderDrawColor(DisplayAndKeyboard_Manager::renderer, BLACK);
-				SDL_RenderClear(DisplayAndKeyboard_Manager::renderer);
+				SDL_SetRenderDrawColor(m_display.renderer, BLACK);
+				SDL_RenderClear(m_display.renderer);
 				
 				m_cpu.resetCPU();
 
 				m_memory.clearMem();
 
-				for (int i = 0; i < DisplayAndKeyboard_Manager::HEIGHT; i++)
+				for (int i = 0; i < m_display.HEIGHT; i++)
 				{
-					for (int j = 0; j < DisplayAndKeyboard_Manager::WIDTH; j++)
+					for (int j = 0; j < m_display.WIDTH; j++)
 					{
-						DisplayAndKeyboard_Manager::screenMatrix[i][j] = 0;
+						m_display.screenMatrix[i][j] = 0;
 					}
 				}
 
-				DisplayAndKeyboard_Manager::coords_buffer.clear();
+				m_display.coords_buffer.clear();
 
 				loadProgram(windowEvent.drop.file);
 				SDL_free(windowEvent.drop.file);
@@ -298,10 +298,10 @@ void ProgramManager::runProgram()
 		m_cpu.updateDT();
 		m_cpu.updateST();
 
-		DisplayAndKeyboard_Manager::drawMatrix(8);
+		m_display.drawMatrix(8);
 
 
-		SDL_RenderPresent(DisplayAndKeyboard_Manager::renderer);
+		SDL_RenderPresent(m_display.renderer);
 
 		/* FPS Limitation */
 		Uint32 delta = SDL_GetTicks() - startLoop;
@@ -314,7 +314,6 @@ void ProgramManager::runProgram()
 		
 	}
 }
-#pragma endregion
 
 /* Buffer operations
 * Used to make a copy of the numbers of an instruction in the buffer to operate with them
@@ -383,14 +382,14 @@ void ProgramManager::execute(Instruction& instruction)
 		{
 
 		case 0x0: //CLS (00E0): Clear the display by setting all pixels to ‘off’.
-			SDL_SetRenderDrawColor(DisplayAndKeyboard_Manager::renderer, BLACK);
-			SDL_RenderClear(DisplayAndKeyboard_Manager::renderer);
+			SDL_SetRenderDrawColor(m_display.renderer, BLACK);
+			SDL_RenderClear(m_display.renderer);
 			
-			for (int i = 0; i < DisplayAndKeyboard_Manager::HEIGHT; i++)
+			for (int i = 0; i < m_display.HEIGHT; i++)
 			{
-				for (int j = 0; j < DisplayAndKeyboard_Manager::WIDTH; j++)
+				for (int j = 0; j < m_display.WIDTH; j++)
 				{
-					DisplayAndKeyboard_Manager::screenMatrix[i][j] = 0;
+					m_display.screenMatrix[i][j] = 0;
 				}
 			}
 
@@ -625,25 +624,25 @@ void ProgramManager::execute(Instruction& instruction)
 		* The bits are set using an XOR with the current display state
 		*/
 
-		xcoord = m_cpu.V[instruction.SecondQuarter] % DisplayAndKeyboard_Manager::WIDTH;
-		ycoord = m_cpu.V[instruction.ThirdQuarter] % DisplayAndKeyboard_Manager::HEIGHT;
+		xcoord = m_cpu.V[instruction.SecondQuarter] % m_display.WIDTH;
+		ycoord = m_cpu.V[instruction.ThirdQuarter] % m_display.HEIGHT;
 
 		try //Checks if I points to ROM Memory
 		{
 			for (int row = 0; row < instruction.FourthQuarter; row++)
 			{
 
-				uByte y_selectedCoord = (ycoord + row) % DisplayAndKeyboard_Manager::HEIGHT;
+				uByte y_selectedCoord = (ycoord + row) % m_display.HEIGHT;
 
 				for (int column = 0; column < 8; column++)
 				{
 					bool collision = false;
 
-					uByte x_selectedCoord = (xcoord + column) % DisplayAndKeyboard_Manager::WIDTH;
+					uByte x_selectedCoord = (xcoord + column) % m_display.WIDTH;
 
 					operator_buffer = (m_memory[m_cpu.I + row] << column) & 0x80; //Select a bit of the byte
 
-					if (DisplayAndKeyboard_Manager::screenMatrix[y_selectedCoord][x_selectedCoord] == 1 && ((operator_buffer >> 7) & 0x01) && collision == false)
+					if (m_display.screenMatrix[y_selectedCoord][x_selectedCoord] == 1 && ((operator_buffer >> 7) & 0x01) && collision == false)
 					{
 						m_cpu.V[0xF] = 1;
 						collision = true;
@@ -654,25 +653,25 @@ void ProgramManager::execute(Instruction& instruction)
 						collision = true;
 					}
 
-					DisplayAndKeyboard_Manager::screenMatrix[y_selectedCoord][x_selectedCoord] ^= (operator_buffer >> 7) & 0x01; //Makes XOR in [x, y]
+					m_display.screenMatrix[y_selectedCoord][x_selectedCoord] ^= (operator_buffer >> 7) & 0x01; //Makes XOR in [x, y]
 					
-					DisplayAndKeyboard_Manager::coords_buffer.push_back(
+					m_display.coords_buffer.push_back(
 						DRW_COORD(
 							y_selectedCoord,
 							x_selectedCoord, 
-							DisplayAndKeyboard_Manager::screenMatrix[y_selectedCoord][x_selectedCoord]
+							m_display.screenMatrix[y_selectedCoord][x_selectedCoord]
 						)
 					); 
 
 					clearBuffer(operator_buffer);
 
-					if (x_selectedCoord >= DisplayAndKeyboard_Manager::WIDTH - 1) //Reachs X limit
+					if (x_selectedCoord >= m_display.WIDTH - 1) //Reachs X limit
 					{
 						break;
 					}
 
 				}
-				if (y_selectedCoord >= DisplayAndKeyboard_Manager::HEIGHT - 1) //Reachs Y limit
+				if (y_selectedCoord >= m_display.HEIGHT - 1) //Reachs Y limit
 				{
 					break;
 				}
@@ -694,7 +693,7 @@ void ProgramManager::execute(Instruction& instruction)
 		case 0xE: /*SKP VX (EX9E) : Skip the next instruction if the key with the value of VX is currently pressed.
 		* Basically, increase PC by two if the key corresponding to the value in VX is pressed. */
 
-			if (DisplayAndKeyboard_Manager::isPressed(m_cpu.V[instruction.SecondQuarter]))
+			if (m_keyboard.isPressed(m_cpu.V[instruction.SecondQuarter]))
 			{
 				m_cpu.PC += 2;
 			}
@@ -704,7 +703,7 @@ void ProgramManager::execute(Instruction& instruction)
 		case 0x1: /* SKNP VX(EXA1) : Skip the next instruction if the key with the value of VX is currently not pressed.
 			* Basically, increase PC by two if the key corresponding to the value in VX is not pressed. */
 
-			if (!DisplayAndKeyboard_Manager::isPressed(m_cpu.V[instruction.SecondQuarter]))
+			if (!m_keyboard.isPressed(m_cpu.V[instruction.SecondQuarter]))
 			{
 				m_cpu.PC += 2;
 			}

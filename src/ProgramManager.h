@@ -6,7 +6,8 @@
 
 #include "chip8cpu.h"
 #include "Memory.h"
-#include "Display_Keyboard.h"
+#include "DisplayManager.h"
+#include "KeyboardManager.h"
 #include "fileManager.h"
 
 
@@ -23,7 +24,7 @@ typedef struct
 class ProgramManager
 {
 public:
-	ProgramManager(chip8cpu& cpu, Memory& mem);
+	ProgramManager(chip8cpu& cpu, Memory& mem, DisplayManager& display, KeyboardManager& keyboard);
 
 	void loadProgram(const char* filepath);
 	void runProgram();
@@ -42,4 +43,6 @@ private:
 
 	Memory m_memory;
 	chip8cpu m_cpu;
+	DisplayManager m_display;
+	KeyboardManager m_keyboard;
 };

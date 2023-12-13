@@ -1,17 +1,17 @@
-#include "Display_Keyboard.h"
 #include "ProgramManager.h"
 
 //TODO: Arreglar bugs; Ordenar código
+// IMPORTANTE -> Encargarse de screenMatrix
 int main(int argc, char** argv)
 {
-	DisplayAndKeyboard_Manager::initDisplay();
-
 	chip8cpu cpu;
 	Memory memory;
-	ProgramManager program(cpu, memory);
-	program.runProgram();
+	DisplayManager display;
+	KeyboardManager keyboard;
 
-	DisplayAndKeyboard_Manager::endDisplay();
+	ProgramManager program(cpu, memory, display, keyboard);
+
+	program.runProgram();
 
 	return 0;
 }

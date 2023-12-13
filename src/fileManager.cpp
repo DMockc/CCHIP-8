@@ -17,7 +17,7 @@ bool checkExtension(const char* file_path)
 	}
 }
 
-std::pair<char*, int> loadFileInBuffer(std::ifstream& file)
+std::pair<char*, size_t> loadFileInBuffer(std::ifstream& file)
 {
 	if (!file.is_open())
 	{
