@@ -33,10 +33,7 @@ DisplayManager::DisplayManager()
 
 	for (int i = 0; i < HEIGHT; i++) //Init screenMatrix
 	{
-		for (int j = 0; j < WIDTH; j++)
-		{
-			screenMatrix[i] = new bool[WIDTH];
-		}
+		screenMatrix[i] = new bool[WIDTH];
 	}
 }
 
