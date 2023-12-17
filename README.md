@@ -1,3 +1,3 @@
 # CCHIP8
 
-> .[!NOTE]
+> .[!NOTE].
