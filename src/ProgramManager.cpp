@@ -5,8 +5,8 @@
 #endif // DEBUG
 #define DEBUG(x) std::cout << x << "\n"
 
-ProgramManager::ProgramManager(chip8cpu& cpu, Memory& mem, DisplayManager& display, KeyboardManager& keyboard)
-	: m_cpu(cpu), m_memory(mem), m_display(display), m_keyboard(keyboard) {}
+ProgramManager::ProgramManager(chip8cpu& cpu, Memory& mem, DisplayManager& display)
+	: m_cpu(cpu), m_memory(mem), m_display(display) {}
 
 
 void ProgramManager::loadProgram(const char* file_path)
@@ -18,22 +18,22 @@ void ProgramManager::loadProgram(const char* file_path)
 	}
 
 	std::ifstream file(file_path, std::ios::binary | std::ios::ate);
-	std::pair<char*, int> buffer = loadFileInBuffer(file);
+	std::pair<char*, size_t> fileContent = loadFileInBuffer(file);
 
-	if (buffer.first == nullptr && buffer.second == NULL)
+	if (fileContent.first == nullptr && fileContent.second == NULL)
 	{
 		std::cerr << "File couldn't be opened!\n";
 		return;
 	}
 
-	for (int i = 0; (RAM_START + i) < MEM_SIZE && i < buffer.second; i++)
+	for (uWord i = 0; (RAM_START + i) < MEM_SIZE && i < fileContent.second; i++)
 	{
-		m_memory.setByte(RAM_START + i, buffer.first[i]);
+		m_memory.setByte(RAM_START + i, fileContent.first[i]);
 	}
 
-	delete[] buffer.first;
+	delete[] fileContent.first;
 
-	m_program_size = static_cast<int>(buffer.second);
+	m_program_size = static_cast<int>(fileContent.second);
 
 	std::cout << "Program loaded!\n";
 
@@ -45,9 +45,6 @@ void ProgramManager::runProgram()
 	Instruction actualInstruction;
 	bool isRunning = true;
 	SDL_Event windowEvent;
-
-	bool speedUp = false;
-	bool slowDown = false;
 
 	unsigned int FPS_LIMIT = 1000;
 
@@ -64,192 +61,10 @@ void ProgramManager::runProgram()
 
 		if (SDL_PollEvent(&windowEvent))
 		{
+			Keyboard::updateKeymap(windowEvent, FPS_LIMIT);
+
 			switch (windowEvent.type)
 			{
-#pragma region KEYDOWN
-			case SDL_KEYDOWN:
-
-				switch (windowEvent.key.keysym.sym)
-				{
-
-				case SDLK_o: //Speed up
-					if (!slowDown) {
-						if (!speedUp) {
-							FPS_LIMIT <<= 1;
-							speedUp = true;
-						}
-						else
-						{
-							FPS_LIMIT >>= 1;
-							speedUp = false;
-						}
-					}
-
-					break;
-
-				case SDLK_i: //Slow down
-					if (!speedUp) {
-						if (!slowDown) {
-							FPS_LIMIT >>= 1;
-							slowDown = true;
-						}
-						else
-						{
-							FPS_LIMIT <<= 1;
-							slowDown = false;
-						}
-					}
-
-					break;
-
-
-
-				case SDLK_1:
-					m_keyboard.keymap[0x01] = true;
-					break;
-
-				case SDLK_2:
-					m_keyboard.keymap[0x02] = true;
-					break;
-
-				case SDLK_3:
-					m_keyboard.keymap[0x03] = true;
-					break;
-
-				case SDLK_4:
-					m_keyboard.keymap[0x0C] = true;
-					break;
-
-				case SDLK_q:
-					m_keyboard.keymap[0x04] = true;
-					break;
-
-				case SDLK_w:
-					m_keyboard.keymap[0x05] = true;
-					break;
-
-				case SDLK_e:
-					m_keyboard. keymap[0x06] = true;
-					break;
-
-				case SDLK_r:
-					m_keyboard.keymap[0x0D] = true;
-					break;
-
-				case SDLK_a:
-					m_keyboard.keymap[0x07] = true;
-					break;
-
-				case SDLK_s:
-					m_keyboard.keymap[0x08] = true;
-					break;
-
-				case SDLK_d:
-					m_keyboard.keymap[0x09] = true;
-					break;
-
-				case SDLK_f:
-					m_keyboard.keymap[0x0E] = true;
-					break;
-
-				case SDLK_z:
-					m_keyboard.keymap[0x0A] = true;
-					break;
-
-				case SDLK_x:
-					m_keyboard.keymap[0x00] = true;
-					break;
-
-				case SDLK_c:
-					m_keyboard.keymap[0x0B] = true;
-					break;
-
-				case SDLK_v:
-					m_keyboard.keymap[0x0F] = true;
-					break;
-
-				default:
-					break;
-				}
-
-				break;
-#pragma endregion
-#pragma region KEYUP
-			case SDL_KEYUP:
-
-				switch (windowEvent.key.keysym.sym)
-				{
-				case SDLK_1:
-					m_keyboard.keymap[0x01] = false;
-					break;
-
-				case SDLK_2:
-					m_keyboard.keymap[0x02] = false;
-					break;
-
-				case SDLK_3:
-					m_keyboard.keymap[0x03] = false;
-					break;
-
-				case SDLK_4:
-					m_keyboard.keymap[0x0C] = false;
-					break;
-
-				case SDLK_q:
-					m_keyboard.keymap[0x04] = false;
-					break;
-
-				case SDLK_w:
-					m_keyboard.keymap[0x05] = false;
-					break;
-
-				case SDLK_e:
-					m_keyboard.keymap[0x06] = false;
-					break;
-
-				case SDLK_r:
-					m_keyboard.keymap[0x0D] = false;
-					break;
-
-				case SDLK_a:
-					m_keyboard.keymap[0x07] = false;
-					break;
-
-				case SDLK_s:
-					m_keyboard.keymap[0x08] = false;
-					break;
-
-				case SDLK_d:
-					m_keyboard.keymap[0x09] = false;
-					break;
-
-				case SDLK_f:
-					m_keyboard.keymap[0x0E] = false;
-					break;
-
-				case SDLK_z:
-					m_keyboard.keymap[0x0A] = false;
-					break;
-
-				case SDLK_x:
-					m_keyboard.keymap[0x00] = false;
-					break;
-
-				case SDLK_c:
-					m_keyboard.keymap[0x0B] = false;
-					break;
-
-				case SDLK_v:
-					m_keyboard.keymap[0x0F] = false;
-					break;
-
-				default:
-					break;
-				}
-
-				break;
-#pragma endregion
-
 			case SDL_DROPFILE:
 				SDL_SetRenderDrawColor(m_display.renderer, BLACK);
 				SDL_RenderClear(m_display.renderer);
@@ -295,8 +110,7 @@ void ProgramManager::runProgram()
 			continue;
 		}
 
-		m_cpu.updateDT();
-		m_cpu.updateST();
+		m_cpu.updateTimers();
 
 		m_display.drawMatrix(8);
 
@@ -309,8 +123,6 @@ void ProgramManager::runProgram()
 		{
 			SDL_Delay(desiredDelta - delta);
 		}
-
-		//SDL_Log("%d | %d\n", m_cpu.DT, m_cpu.ST);
 		
 	}
 }
@@ -374,6 +186,10 @@ void ProgramManager::execute(Instruction& instruction)
 	uByte xcoord = 0;
 	uByte ycoord = 0;
 
+	bool collision = false;
+
+	/* Instructions documentation: https://tonisagrista.com/blog/2021/chip8-spec */
+
 	switch (instruction.FirstQuarter)
 	{
 	case 0x0:
@@ -381,7 +197,7 @@ void ProgramManager::execute(Instruction& instruction)
 		switch (instruction.FourthQuarter)
 		{
 
-		case 0x0: //CLS (00E0): Clear the display by setting all pixels to ‘off’.
+		case 0x0: //CLS (00E0): Clear the display by setting all pixels to black.
 			SDL_SetRenderDrawColor(m_display.renderer, BLACK);
 			SDL_RenderClear(m_display.renderer);
 			
@@ -627,6 +443,8 @@ void ProgramManager::execute(Instruction& instruction)
 		xcoord = m_cpu.V[instruction.SecondQuarter] % m_display.WIDTH;
 		ycoord = m_cpu.V[instruction.ThirdQuarter] % m_display.HEIGHT;
 
+		m_cpu.V[0xF] = 0;
+
 		try //Checks if I points to ROM Memory
 		{
 			for (int row = 0; row < instruction.FourthQuarter; row++)
@@ -636,42 +454,37 @@ void ProgramManager::execute(Instruction& instruction)
 
 				for (int column = 0; column < 8; column++)
 				{
-					bool collision = false;
 
 					uByte x_selectedCoord = (xcoord + column) % m_display.WIDTH;
 
 					operator_buffer = (m_memory[m_cpu.I + row] << column) & 0x80; //Select a bit of the byte
 
-					if (m_display.screenMatrix[y_selectedCoord][x_selectedCoord] == 1 && ((operator_buffer >> 7) & 0x01) && collision == false)
+					bool color = (operator_buffer >> 7) & 0x01;
+
+					if (m_display.screenMatrix[y_selectedCoord][x_selectedCoord] == 1 && color == 1)
 					{
-						m_cpu.V[0xF] = 1;
-						collision = true;
-					}
-					else
-					{
-						m_cpu.V[0xF] = 0;
-						collision = true;
+						m_cpu.V[0xF] = 1; //Update collision flag
 					}
 
-					m_display.screenMatrix[y_selectedCoord][x_selectedCoord] ^= (operator_buffer >> 7) & 0x01; //Makes XOR in [x, y]
-					
+					m_display.screenMatrix[y_selectedCoord][x_selectedCoord] ^= color; //Make XOR in [x, y]
+
 					m_display.coords_buffer.push_back(
 						DRW_COORD(
 							y_selectedCoord,
 							x_selectedCoord, 
 							m_display.screenMatrix[y_selectedCoord][x_selectedCoord]
 						)
-					); 
+					);
 
 					clearBuffer(operator_buffer);
 
-					if (x_selectedCoord >= m_display.WIDTH - 1) //Reachs X limit
+					if (x_selectedCoord >= m_display.WIDTH - 1) //Reach X limit
 					{
 						break;
 					}
 
 				}
-				if (y_selectedCoord >= m_display.HEIGHT - 1) //Reachs Y limit
+				if (y_selectedCoord >= m_display.HEIGHT - 1) //Reach Y limit
 				{
 					break;
 				}
@@ -693,7 +506,7 @@ void ProgramManager::execute(Instruction& instruction)
 		case 0xE: /*SKP VX (EX9E) : Skip the next instruction if the key with the value of VX is currently pressed.
 		* Basically, increase PC by two if the key corresponding to the value in VX is pressed. */
 
-			if (m_keyboard.isPressed(m_cpu.V[instruction.SecondQuarter]))
+			if (Keyboard::isPressed(m_cpu.V[instruction.SecondQuarter]))
 			{
 				m_cpu.PC += 2;
 			}
@@ -703,7 +516,7 @@ void ProgramManager::execute(Instruction& instruction)
 		case 0x1: /* SKNP VX(EXA1) : Skip the next instruction if the key with the value of VX is currently not pressed.
 			* Basically, increase PC by two if the key corresponding to the value in VX is not pressed. */
 
-			if (!m_keyboard.isPressed(m_cpu.V[instruction.SecondQuarter]))
+			if (!Keyboard::isPressed(m_cpu.V[instruction.SecondQuarter]))
 			{
 				m_cpu.PC += 2;
 			}
@@ -721,7 +534,7 @@ void ProgramManager::execute(Instruction& instruction)
 		break;
 
 
-	case 0xF: //https://tonisagrista.com/blog/2021/chip8-spec/#sknp-vx-----exa1
+	case 0xF:
 		loadNumberToBuffer(operator_buffer, instruction.ThirdQuarter, instruction.FourthQuarter);
 
 		switch (operator_buffer)
@@ -788,7 +601,7 @@ void ProgramManager::execute(Instruction& instruction)
 		case 0x55: /* LD[I], VX(FX55) : Store registers from V0 to VX in the main memory, starting at location I.
 			Note that X is the number of the register, so we can use it in the loop. 
 			In the following pseudo-code, V[i] allows for indexed register access, so that VX == V[X] */
-			for (int i = 0; i < instruction.SecondQuarter + 1 && (m_cpu.I + i) < MEM_SIZE; i++)
+			for (int i = 0; i <= instruction.SecondQuarter && (m_cpu.I + i) < MEM_SIZE; i++)
 			{
 				m_memory.setByte(m_cpu.I + i, m_cpu.V[i]);
 			}
@@ -797,7 +610,7 @@ void ProgramManager::execute(Instruction& instruction)
 
 
 		case 0x65: // LD VX, [I] (FX65): Load the memory data starting at address I into the registers V0 to VX
-			for (int i = 0; i < instruction.SecondQuarter + 1 && (m_cpu.I + i) < MEM_SIZE; i++)
+			for (int i = 0; i <= instruction.SecondQuarter && (m_cpu.I + i) < MEM_SIZE; i++)
 			{
 				m_cpu.V[i] = m_memory[m_cpu.I + i];
 			}

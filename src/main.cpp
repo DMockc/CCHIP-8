@@ -1,15 +1,13 @@
 #include "ProgramManager.h"
 
-//TODO: Arreglar bugs; Ordenar código
-// IMPORTANTE -> Encargarse de screenMatrix
+//TODO: Arreglar bugs; Ordenar código; Arreglar colisiones (VF Register)
 int main(int argc, char** argv)
 {
 	chip8cpu cpu;
 	Memory memory;
 	DisplayManager display;
-	KeyboardManager keyboard;
 
-	ProgramManager program(cpu, memory, display, keyboard);
+	ProgramManager program(cpu, memory, display);
 
 	program.runProgram();
 

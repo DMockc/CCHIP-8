@@ -15,8 +15,7 @@ struct chip8cpu
 
 	inline void resetCPU();
 
-	void updateST();
-	void updateDT();
+	void updateTimers();
 
 	/* Registers
 		* V0 - VE: General-purpose 8-bit registers

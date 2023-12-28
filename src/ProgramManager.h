@@ -3,7 +3,6 @@
 #include <fstream>
 #include <conio.h>
 
-
 #include "chip8cpu.h"
 #include "Memory.h"
 #include "DisplayManager.h"
@@ -24,7 +23,7 @@ typedef struct
 class ProgramManager
 {
 public:
-	ProgramManager(chip8cpu& cpu, Memory& mem, DisplayManager& display, KeyboardManager& keyboard);
+	ProgramManager(chip8cpu& cpu, Memory& mem, DisplayManager& display);
 
 	void loadProgram(const char* filepath);
 	void runProgram();
@@ -44,5 +43,4 @@ private:
 	Memory m_memory;
 	chip8cpu m_cpu;
 	DisplayManager m_display;
-	KeyboardManager m_keyboard;
 };

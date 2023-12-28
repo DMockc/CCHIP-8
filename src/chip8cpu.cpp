@@ -1,6 +1,6 @@
 #include "chip8cpu.h"
 
-inline void _beep(void* arg)
+inline void beep(void* arg)
 {
 	Beep(900, 50);
 	_endthread();
@@ -25,23 +25,11 @@ inline void chip8cpu::resetCPU()
 	SP = 0;
 }
 
-void chip8cpu::updateDT()
-{
-	if (DT > 0)
-	{
-		DT -= 16;
-	}
-	else
-	{
-		DT = 0;
-	}
-}
-
-void chip8cpu::updateST()
+void chip8cpu::updateTimers()
 {
 	if (ST > 0)
 	{
-		_beginthread(_beep, 0, NULL);
+		_beginthread(beep, 0, NULL);
 		if (ST - 16 < 0)
 		{
 			ST = 0;
@@ -49,5 +37,14 @@ void chip8cpu::updateST()
 		else {
 			ST -= 16;
 		}
+	}
+
+	if (DT > 0)
+	{
+		DT -= 16;
+	}
+	else
+	{
+		DT = 0;
 	}
 }

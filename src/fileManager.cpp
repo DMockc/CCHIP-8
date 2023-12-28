@@ -25,11 +25,11 @@ std::pair<char*, size_t> loadFileInBuffer(std::ifstream& file)
 	}
 
 	std::streampos file_size = file.tellg();
-	char* buffer = new char[file_size];
+	char* fileContent = new char[file_size];
 
 	file.seekg(0, std::ios::beg);
-	file.read(buffer, file_size);
+	file.read(fileContent, file_size);
 	file.close();
 
-	return std::make_pair(buffer, file_size);
+	return std::make_pair(fileContent, static_cast<size_t>(file_size));
 }

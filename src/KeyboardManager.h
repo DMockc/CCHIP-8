@@ -5,12 +5,9 @@
 
 using uByte = unsigned char;
 
-class KeyboardManager
+namespace Keyboard
 {
-public:
-	KeyboardManager();
-
-	bool keymap[KEYMAP_SIZE];
+	extern bool keymap[KEYMAP_SIZE];
 	bool isPressed(uByte key);
-
-};
+	void updateKeymap(SDL_Event& event, unsigned int& FPS);
+}; //namespace: Keyboard
