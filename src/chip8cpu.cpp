@@ -17,7 +17,7 @@ inline void chip8cpu::resetCPU()
 	{
 		V[i] = 0;
 	}
-
+	
 	ST = 0;
 	DT = 0;
 	I = 0;
@@ -25,26 +25,30 @@ inline void chip8cpu::resetCPU()
 	SP = 0;
 }
 
-void chip8cpu::updateTimers()
+void chip8cpu::updateTimers(unsigned int FPS)
 {
+	int delay = FPS / 60;
+
 	if (ST > 0)
 	{
 		_beginthread(beep, 0, NULL);
-		if (ST - 16 < 0)
+		if (ST - delay <= 0)
 		{
 			ST = 0;
 		}
 		else {
-			ST -= 16;
+			ST -= delay;
 		}
 	}
 
 	if (DT > 0)
 	{
-		DT -= 16;
-	}
-	else
-	{
-		DT = 0;
+		if (DT - delay <= 0)
+		{
+			DT = 0;
+		}
+		else {
+			DT -= delay;
+		}
 	}
 }

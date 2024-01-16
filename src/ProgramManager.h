@@ -8,7 +8,8 @@
 #include "DisplayManager.h"
 #include "KeyboardManager.h"
 #include "fileManager.h"
-
+#include "instruction_set.h"
+#include "buffer_operations.h"
 
 typedef struct
 {
@@ -29,14 +30,8 @@ public:
 	void runProgram();
 
 private:
-
-	inline void loadNumberToBuffer(uWord& buffer, uByte N1);
-	inline void loadNumberToBuffer(uWord& buffer, uByte N1, uByte N2);
-	inline void loadNumberToBuffer(uWord& buffer, uByte N1, uByte N2, uByte N3);
-	inline void clearBuffer(uWord& buffer);
-
-	inline void execute(Instruction& instruction);
-	inline void loadInstruction(Instruction& instruction, uWord& PC);
+	void execute(Instruction& instruction);
+	void loadInstruction(Instruction& instruction, uWord& PC);
 	int m_program_size = 0;
 
 

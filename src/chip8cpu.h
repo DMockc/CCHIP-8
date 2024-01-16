@@ -5,7 +5,7 @@
 #include <Windows.h>
 #endif
 
-
+#define BITS_IN_A_BYTE 8
 using uByte = unsigned char;
 using uWord = unsigned short;
 
@@ -15,7 +15,7 @@ struct chip8cpu
 
 	inline void resetCPU();
 
-	void updateTimers();
+	void updateTimers(unsigned int FPS);
 
 	/* Registers
 		* V0 - VE: General-purpose 8-bit registers

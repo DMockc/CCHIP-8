@@ -19,7 +19,7 @@ void Memory::setByte(uWord index, uByte value)
 	{
 		throw "Trying to write in ROM Memory";
 	}
-	else if (index > 0xFFF)
+	else if (index > MEM_SIZE)
 	{
 		throw "Trying to write out of Memory";
 	}

@@ -2,6 +2,7 @@
 
 #define MEM_SIZE 0xFFF
 #define RAM_START 0x200
+#define FONT_SIZE 0x05
 
 using uByte = unsigned char;
 using uWord = unsigned short;

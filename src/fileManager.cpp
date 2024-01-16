@@ -3,17 +3,17 @@
 bool checkExtension(const char* file_path)
 {
 	std::string filename = file_path;
-	std::string::size_type idx;
+	std::string::size_type dotLocation;
 	
-	idx = filename.rfind('.');
+	dotLocation = filename.rfind('.');
 
-	if (!(idx != std::string::npos && filename.substr(idx) == ".ch8"))
+	if (dotLocation != std::string::npos && filename.substr(dotLocation) == ".ch8")
 	{
-		return false;
+		return true;
 	}
 	else
 	{
-		return true;
+		return false;
 	}
 }
 
@@ -21,6 +21,7 @@ std::pair<char*, size_t> loadFileInBuffer(std::ifstream& file)
 {
 	if (!file.is_open())
 	{
+		file.close();
 		return std::make_pair(nullptr, NULL);
 	}
 
