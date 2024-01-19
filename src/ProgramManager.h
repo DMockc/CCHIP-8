@@ -38,4 +38,5 @@ private:
 	Memory m_memory;
 	chip8cpu m_cpu;
 	DisplayManager m_display;
+	SDL_Event m_windowEvent;
 };

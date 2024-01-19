@@ -6,7 +6,7 @@
 #define DEBUG(x) std::cout << x << "\n"
 
 ProgramManager::ProgramManager(chip8cpu& cpu, Memory& mem, DisplayManager& display)
-	: m_cpu(cpu), m_memory(mem), m_display(display) {}
+	: m_cpu(cpu), m_memory(mem), m_display(display), m_windowEvent() {}
 
 
 void ProgramManager::loadProgram(const char* file_path)
@@ -44,7 +44,6 @@ void ProgramManager::runProgram()
 {
 	Instruction actualInstruction;
 	bool isRunning = true;
-	SDL_Event windowEvent;
 	unsigned int FPS_LIMIT = 500;
 
 	SDL_EventState(SDL_DROPFILE, SDL_ENABLE);
@@ -54,11 +53,11 @@ void ProgramManager::runProgram()
 		unsigned int desiredDelta = 1000 / FPS_LIMIT;
 		Uint32 startLoop = SDL_GetTicks();
 
-		if (SDL_PollEvent(&windowEvent))
+		if (SDL_PollEvent(&m_windowEvent))
 		{
-			Keyboard::updateKeymap(windowEvent, FPS_LIMIT);
+			Keyboard::updateKeymap(m_windowEvent, FPS_LIMIT);
 
-			switch (windowEvent.type)
+			switch (m_windowEvent.type)
 			{
 			case SDL_DROPFILE:
 				SDL_SetRenderDrawColor(m_display.renderer, BLACK);
@@ -78,8 +77,8 @@ void ProgramManager::runProgram()
 
 				m_display.coords_buffer.clear();
 
-				loadProgram(windowEvent.drop.file);
-				SDL_free(windowEvent.drop.file);
+				loadProgram(m_windowEvent.drop.file);
+				SDL_free(m_windowEvent.drop.file);
 				break;
 
 			case SDL_QUIT:
@@ -97,8 +96,6 @@ void ProgramManager::runProgram()
 		{
 			loadInstruction(actualInstruction, m_cpu.PC);
 			execute(actualInstruction);
-			DEBUG(std::hex << static_cast<int>(m_memory[m_cpu.PC]) << std::hex << static_cast<int>(m_memory[m_cpu.PC + 1]) << " | " << std::hex << static_cast<int>(m_cpu.PC)
-			<< "  -  " << std::dec << (int)m_cpu.DT);
 		}
 		else
 		{
@@ -492,7 +489,7 @@ void ProgramManager::execute(Instruction& instruction)
 		case LD_VX_K:
 			for (uByte i = 0; i < KEYMAP_SIZE; i++)
 			{
-				if (Keyboard::isPressed(i))
+				if (Keyboard::isReleased(m_windowEvent, i))
 				{
 					m_cpu.V[instruction.SecondQuarter] = i;
 					m_cpu.PC += 2; //Next instruction

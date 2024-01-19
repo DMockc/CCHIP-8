@@ -2,7 +2,7 @@
 
 /*
 * TODO:
-* Arreglar bugs(Sobretodo el Connect 4, al manterner un botón que no sirve mientras se usa otro que sí el sprite se duplica mágicamente)
+* Arreglar bugs: Pong (no hay colisiones)
 * Ordenar código
 */
 

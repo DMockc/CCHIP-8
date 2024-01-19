@@ -32,7 +32,7 @@ void chip8cpu::updateTimers(unsigned int FPS)
 	if (ST > 0)
 	{
 		_beginthread(beep, 0, NULL);
-		if (ST - delay <= 0)
+		if (ST - delay < 0)
 		{
 			ST = 0;
 		}
@@ -43,7 +43,7 @@ void chip8cpu::updateTimers(unsigned int FPS)
 
 	if (DT > 0)
 	{
-		if (DT - delay <= 0)
+		if (DT - delay < 0)
 		{
 			DT = 0;
 		}

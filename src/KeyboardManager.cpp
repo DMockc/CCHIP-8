@@ -9,6 +9,202 @@ namespace Keyboard {
 		return keymap[key];
 	}
 
+	bool Keyboard::isReleased(SDL_Event& event, uByte key)
+	{
+
+		switch (event.type)
+		{
+		case SDL_KEYUP:
+
+			switch (event.key.keysym.sym)
+			{
+			case SDLK_1:
+				if (key == 0x1)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+				break;
+
+			case SDLK_2:
+				if (key == 0x2)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+				break;
+
+			case SDLK_3:
+				if (key == 0x3)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+				break;
+
+			case SDLK_4:
+				if (key == 0xC)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+				break;
+
+			case SDLK_q:
+				if (key == 0x4)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+				break;
+
+			case SDLK_w:
+				if (key == 0x5)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+				break;
+
+			case SDLK_e:
+				if (key == 0x6)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+				break;
+
+			case SDLK_r:
+				if (key == 0xD)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+				break;
+
+			case SDLK_a:
+				if (key == 0x7)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+				break;
+
+			case SDLK_s:
+				if (key == 0x8)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+				break;
+
+			case SDLK_d:
+				if (key == 0x9)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+				break;
+
+			case SDLK_f:
+				if (key == 0xE)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+				break;
+
+			case SDLK_z:
+				if (key == 0xA)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+				break;
+
+			case SDLK_x:
+				if (key == 0x0)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+				break;
+
+			case SDLK_c:
+				if (key == 0xB)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+				break;
+
+			case SDLK_v:
+				if (key == 0xF)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+				break;
+
+			default:
+				return false;
+				break;
+			}
+
+			return false;
+			break;
+		}
+		return false;
+	}
+
 	void updateKeymap(SDL_Event& event, unsigned int& FPS)
 	{
 		static bool speedUp = false;
