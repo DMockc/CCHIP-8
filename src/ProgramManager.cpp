@@ -60,22 +60,9 @@ void ProgramManager::runProgram()
 			switch (m_windowEvent.type)
 			{
 			case SDL_DROPFILE:
-				SDL_SetRenderDrawColor(m_display.renderer, BLACK);
-				SDL_RenderClear(m_display.renderer);
-				
 				m_cpu.resetCPU();
-
 				m_memory.clearMem();
-
-				for (int i = 0; i < m_display.HEIGHT; i++)
-				{
-					for (int j = 0; j < m_display.WIDTH; j++)
-					{
-						m_display.screenMatrix[i][j] = 0;
-					}
-				}
-
-				m_display.coords_buffer.clear();
+				m_display.clearDisplay();
 
 				loadProgram(m_windowEvent.drop.file);
 				SDL_free(m_windowEvent.drop.file);
@@ -303,7 +290,7 @@ void ProgramManager::execute(Instruction& instruction)
 
 
 		case SUB_VX_VY:
-			if (m_cpu.V[instruction.SecondQuarter] - m_cpu.V[instruction.ThirdQuarter] < 0x00)
+			if (m_cpu.V[instruction.ThirdQuarter] - m_cpu.V[instruction.SecondQuarter] < 0x00)
 			{
 				m_cpu.V[0xF] = 1;
 			}
@@ -336,7 +323,7 @@ void ProgramManager::execute(Instruction& instruction)
 				m_cpu.V[0xF] = 0;
 			}
 
-			m_cpu.V[instruction.ThirdQuarter] -= m_cpu.V[instruction.SecondQuarter];
+			m_cpu.V[instruction.SecondQuarter] = m_cpu.V[instruction.ThirdQuarter] - m_cpu.V[instruction.SecondQuarter];
 
 			break;
 

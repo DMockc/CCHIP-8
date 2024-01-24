@@ -27,6 +27,7 @@ public:
 	DisplayManager();
 	~DisplayManager();
 	
+	void clearDisplay();
 	void drawMatrix(int offset);
 
 	SDL_Renderer* renderer;

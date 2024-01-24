@@ -28,13 +28,7 @@ DisplayManager::DisplayManager()
 		exit(-1);
 	}
 
-	for (int i = 0; i < HEIGHT; i++)
-	{
-		for (int j = 0; j < WIDTH; j++)
-		{
-			screenMatrix[i][j] = 0;
-		}
-	}
+	clearDisplay();
 
 	renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED);
 }
@@ -44,6 +38,21 @@ DisplayManager::~DisplayManager()
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(m_window);
 	SDL_Quit();
+}
+
+void DisplayManager::clearDisplay()
+{
+	SDL_SetRenderDrawColor(renderer, BLACK);
+	SDL_RenderClear(renderer);
+
+	coords_buffer.clear();
+	for (int i = 0; i < HEIGHT; i++)
+	{
+		for (int j = 0; j < WIDTH; j++)
+		{
+			screenMatrix[i][j] = 0;
+		}
+	}
 }
 
 void DisplayManager::drawMatrix(int offset)
