@@ -89,7 +89,7 @@ void DisplayManager::drawMatrix(int offset)
 
 void DisplayManager::loadFont()
 {
-	m_font = TTF_OpenFont("C:\\Users\\Sergio\\dev\\CHIP8_EMU\\CHIP8_EMU\\assets\\arial_font.ttf", 72);
+	m_font = TTF_OpenFont("../assets/arial_font.ttf", 72);
 	if (m_font == NULL)
 	{
 		std::cerr << "Couldn't load font: " << SDL_GetError() << "\n";
