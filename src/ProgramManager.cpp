@@ -45,6 +45,7 @@ void ProgramManager::runProgram()
 	Instruction actualInstruction;
 	bool isRunning = true;
 	unsigned int FPS_LIMIT = 500;
+	std::string speed_text = "";
 
 	SDL_EventState(SDL_DROPFILE, SDL_ENABLE);
 
@@ -52,10 +53,9 @@ void ProgramManager::runProgram()
 	{
 		unsigned int desiredDelta = 1000 / FPS_LIMIT;
 		Uint32 startLoop = SDL_GetTicks();
-
 		if (SDL_PollEvent(&m_windowEvent))
 		{
-			Keyboard::updateKeymap(m_windowEvent, FPS_LIMIT);
+			Keyboard::updateKeymap(m_windowEvent, FPS_LIMIT, speed_text, m_display.text_alpha);
 
 			switch (m_windowEvent.type)
 			{
@@ -91,9 +91,15 @@ void ProgramManager::runProgram()
 			continue;
 		}
 
+		if (m_display.text_alpha - 1 > 0)
+		{
+			m_display.text_alpha--;
+		}
+
 		m_cpu.updateTimers(FPS_LIMIT);
 		m_display.drawMatrix(8);
-
+		m_display.writeText(speed_text.c_str());
+		m_display.fillTextPlace(8);
 
 		SDL_RenderPresent(m_display.renderer);
 
@@ -152,9 +158,9 @@ void ProgramManager::execute(Instruction& instruction)
 			SDL_SetRenderDrawColor(m_display.renderer, BLACK);
 			SDL_RenderClear(m_display.renderer);
 			
-			for (int i = 0; i < m_display.HEIGHT; i++)
+			for (int i = 0; i < HEIGHT; i++)
 			{
-				for (int j = 0; j < m_display.WIDTH; j++)
+				for (int j = 0; j < WIDTH; j++)
 				{
 					m_display.screenMatrix[i][j] = 0;
 				}
@@ -381,20 +387,20 @@ void ProgramManager::execute(Instruction& instruction)
 
 
 	case DRW_VX_VY_N:
-		xcoord = m_cpu.V[instruction.SecondQuarter] % m_display.WIDTH;
-		ycoord = m_cpu.V[instruction.ThirdQuarter] % m_display.HEIGHT;
+		xcoord = m_cpu.V[instruction.SecondQuarter] % WIDTH;
+		ycoord = m_cpu.V[instruction.ThirdQuarter] % HEIGHT;
 
 		m_cpu.V[0xF] = 0;
 
 		for (int row = 0; row < instruction.FourthQuarter; row++)
 		{
 
-			uByte y_selectedCoord = (ycoord + row) % m_display.HEIGHT;
+			uByte y_selectedCoord = (ycoord + row) % HEIGHT;
 
 			for (int column = 0; column < BITS_IN_A_BYTE; column++)
 			{
 
-				uByte x_selectedCoord = (xcoord + column) % m_display.WIDTH;
+				uByte x_selectedCoord = (xcoord + column) % WIDTH;
 
 				operator_buffer = (m_memory[m_cpu.I + row] << column) & 0x80; //Select a bit of the byte
 
@@ -417,13 +423,13 @@ void ProgramManager::execute(Instruction& instruction)
 
 				clearBuffer(operator_buffer);
 
-				if (x_selectedCoord >= m_display.WIDTH - 1) //Reach X limit
+				if (x_selectedCoord >= WIDTH - 1) //Reach X limit
 				{
 					break;
 				}
 
 			}
-			if (y_selectedCoord >= m_display.HEIGHT - 1) //Reach Y limit
+			if (y_selectedCoord >= HEIGHT - 1) //Reach Y limit
 			{
 				break;
 			}

@@ -205,7 +205,7 @@ namespace Keyboard {
 		return false;
 	}
 
-	void updateKeymap(SDL_Event& event, unsigned int& FPS)
+	void updateKeymap(SDL_Event& event, unsigned int& FPS, std::string& text, Uint8& alpha)
 	{
 		static bool speedUp = false;
 		static bool slowDown = false;
@@ -223,12 +223,15 @@ namespace Keyboard {
 					if (!speedUp) {
 						FPS <<= 1;
 						speedUp = true;
+						text = "Speed x2";
 					}
 					else
 					{
 						FPS >>= 1;
 						speedUp = false;
+						text = "Speed x1";
 					}
+					alpha = 255;
 				}
 
 				break;
@@ -238,12 +241,15 @@ namespace Keyboard {
 					if (!slowDown) {
 						FPS >>= 1;
 						slowDown = true;
+						text = "Speed x0.5";
 					}
 					else
 					{
 						FPS <<= 1;
 						slowDown = false;
+						text = "Speed x1";
 					}
+					alpha = 255;
 				}
 
 				break;

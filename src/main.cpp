@@ -2,8 +2,8 @@
 
 /*
 * TODO:
-* Arreglar bugs: Pong (no hay colisiones)
-* Ordenar código
+* Arreglar velocidad al escribir el speed en pantalla
+* Ordenar código (Display)
 */
 
 int main(int argc, char** argv)
