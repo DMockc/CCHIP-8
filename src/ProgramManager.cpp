@@ -45,7 +45,9 @@ void ProgramManager::runProgram()
 	Instruction actualInstruction;
 	bool isRunning = true;
 	unsigned int FPS_LIMIT = 500;
-	std::string speed_text = "";
+
+	dTEXT SpeedText("", 0, 0, { WHITE }, true);
+	dTEXT PausedText("PAUSED", 850, 0, { WHITE }, false);
 
 	SDL_EventState(SDL_DROPFILE, SDL_ENABLE);
 
@@ -55,7 +57,7 @@ void ProgramManager::runProgram()
 		Uint32 startLoop = SDL_GetTicks();
 		if (SDL_PollEvent(&m_windowEvent))
 		{
-			Keyboard::updateKeymap(m_windowEvent, FPS_LIMIT, speed_text, m_display.text_alpha);
+			Keyboard::updateKeymap(m_windowEvent, FPS_LIMIT, SpeedText.t_content, SpeedText.color.a);
 
 			switch (m_windowEvent.type)
 			{
@@ -69,6 +71,9 @@ void ProgramManager::runProgram()
 				break;
 
 			case SDL_QUIT:
+				m_cpu.resetCPU();
+				m_memory.clearMem();
+				m_display.clearDisplay();
 				isRunning = false;
 				break;
 
@@ -78,6 +83,20 @@ void ProgramManager::runProgram()
 		}
 
 		if (m_program_size == 0) continue; //There isn't a loaded program
+
+		if (Keyboard::paused)
+		{
+			m_display.writeText(PausedText);
+			m_display.updateSpeedText(SpeedText);
+			m_display.updateAlpha(SpeedText, Keyboard::speedUp, Keyboard::slowDown);
+			SDL_RenderPresent(m_display.renderer);
+
+			Uint32 delta = SDL_GetTicks() - startLoop;
+			waitFPS(delta, desiredDelta);
+			continue;
+		}
+
+		m_display.fillTextPlace(PausedText);
 
 		if (m_cpu.PC < MEM_SIZE)
 		{
@@ -91,24 +110,18 @@ void ProgramManager::runProgram()
 			continue;
 		}
 
-		if (m_display.text_alpha - 1 > 0)
-		{
-			m_display.text_alpha--;
-		}
-
+		
+		
 		m_cpu.updateTimers(FPS_LIMIT);
-		m_display.drawMatrix(8);
-		m_display.writeText(speed_text.c_str());
-		m_display.fillTextPlace(8);
+		m_display.drawMatrix();
+		m_display.updateSpeedText(SpeedText);
+		m_display.updateAlpha(SpeedText, Keyboard::speedUp, Keyboard::slowDown);
 
 		SDL_RenderPresent(m_display.renderer);
 
 		/* FPS Limitation */
 		Uint32 delta = SDL_GetTicks() - startLoop;
-		if (delta < desiredDelta)
-		{
-			SDL_Delay(desiredDelta - delta);
-		}
+		waitFPS(delta, desiredDelta);
 		
 	}
 }
@@ -408,7 +421,7 @@ void ProgramManager::execute(Instruction& instruction)
 
 				if (m_display.screenMatrix[y_selectedCoord][x_selectedCoord] == 1 && color == 1)
 				{
-					m_cpu.V[0xF] = 1; //Update collision
+					m_cpu.V[0xF] = m_display.screenMatrix[y_selectedCoord][x_selectedCoord] == 1 && color == 1; //Update collision
 				}
 
 				m_display.screenMatrix[y_selectedCoord][x_selectedCoord] ^= color; //Make XOR in [x, y]

@@ -2,7 +2,6 @@
 
 /*
 * TODO:
-* Arreglar velocidad al escribir el speed en pantalla
 * Ordenar código (Display)
 */
 
@@ -15,6 +14,7 @@ int main(int argc, char** argv)
 	ProgramManager program(cpu, memory, display);
 
 	program.runProgram();
+	display.DisplayQuit();
 
 	return 0;
 }

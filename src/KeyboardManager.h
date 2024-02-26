@@ -9,6 +9,10 @@ using uByte = unsigned char;
 namespace Keyboard
 {
 	extern bool keymap[KEYMAP_SIZE];
+	extern bool speedUp;
+	extern bool slowDown;
+	extern bool paused;
+
 	bool isPressed(uByte key);
 	bool isReleased(SDL_Event& event, uByte key);
 	void updateKeymap(SDL_Event& event, unsigned int& FPS, std::string& text, Uint8& alpha);

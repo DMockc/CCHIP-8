@@ -3,6 +3,9 @@
 namespace Keyboard {
 
 	bool keymap[KEYMAP_SIZE];
+	bool speedUp = false;
+	bool slowDown = false;
+	bool paused = false;
 
 	bool Keyboard::isPressed(uByte key)
 	{
@@ -207,8 +210,6 @@ namespace Keyboard {
 
 	void updateKeymap(SDL_Event& event, unsigned int& FPS, std::string& text, Uint8& alpha)
 	{
-		static bool speedUp = false;
-		static bool slowDown = false;
 
 		switch (event.type)
 		{
@@ -254,7 +255,9 @@ namespace Keyboard {
 
 				break;
 
-
+			case SDLK_p: //Pause
+				paused = !paused;
+				break;
 
 			case SDLK_1:
 				Keyboard::keymap[0x01] = true;
