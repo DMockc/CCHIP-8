@@ -16,7 +16,6 @@ set(INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
 set(LIB_DIR ${PROJECT_SOURCE_DIR}/lib)
 
 set(SOURCE_FILES
-	${PROJECT_SOURCE_DIR}/assets/icon.ico
 	${SOURCE_DIR}/main.cpp
 	${SOURCE_DIR}/buffer_operations.cpp
 	${SOURCE_DIR}/buffer_operations.h
