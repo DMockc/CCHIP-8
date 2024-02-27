@@ -11,7 +11,7 @@ chip8cpu::chip8cpu()
 	resetCPU();
 }
 
-inline void chip8cpu::resetCPU()
+void chip8cpu::resetCPU()
 {
 	for (int i = 0; i < 16; i++)
 	{
