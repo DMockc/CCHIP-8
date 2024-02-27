@@ -1,10 +1,4 @@
 #include "ProgramManager.h"
-
-/*
-* TODO:
-* Ordenar código (Display)
-*/
-
 int main(int argc, char** argv)
 {
 	chip8cpu cpu;
