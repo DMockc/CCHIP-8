@@ -1,4 +1,6 @@
-﻿cmake_minimum_required (VERSION 3.8)
+cmake_minimum_required (VERSION 3.8)
+
+set(CMAKE_BUILD_TYPE Release)
 
 # Habilite Recarga activa para los compiladores de MSVC si se admiten.
 if (POLICY CMP0141)
@@ -7,7 +9,6 @@ if (POLICY CMP0141)
 endif()
 
 project ("CCHIP8" VERSION 0.9)
-
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED 14)
 
@@ -36,6 +37,8 @@ set(SOURCE_FILES
 
 add_executable(CCHIP8-EMULATOR ${SOURCE_FILES})
 
+file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/Release/resource")
+
 add_custom_command(
     TARGET CCHIP8-EMULATOR POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy
@@ -43,7 +46,7 @@ add_custom_command(
 	COMMAND ${CMAKE_COMMAND} -E copy
         ${LIB_DIR}/SDL2_ttf.dll $<TARGET_FILE_DIR:CCHIP8-EMULATOR>
 	COMMAND ${CMAKE_COMMAND} -E copy
-        ${PROJECT_SOURCE_DIR}/assets/arial_font.ttf $<TARGET_FILE_DIR:CCHIP8-EMULATOR>
+        ${PROJECT_SOURCE_DIR}/assets/arial_font.ttf $<TARGET_FILE_DIR:CCHIP8-EMULATOR>/resource
 )
 
 target_include_directories(CCHIP8-EMULATOR PRIVATE ${INCLUDE_DIR})
