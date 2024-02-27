@@ -52,5 +52,3 @@ target_link_libraries(CCHIP8-EMULATOR PRIVATE
 	${LIB_DIR}/SDL2main.lib
 	${LIB_DIR}/SDL2_ttf.lib
 )
-
-add_definitions(-DFONT_PATH="${PROJECT_BINARY_DIR}/arial_font.ttf")
