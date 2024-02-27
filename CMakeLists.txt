@@ -37,7 +37,7 @@ set(SOURCE_FILES
 
 add_executable(CCHIP8-EMULATOR ${SOURCE_FILES})
 
-file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/Release/resource")
+file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/Release/resources")
 
 add_custom_command(
     TARGET CCHIP8-EMULATOR POST_BUILD
@@ -46,7 +46,7 @@ add_custom_command(
 	COMMAND ${CMAKE_COMMAND} -E copy
         ${LIB_DIR}/SDL2_ttf.dll $<TARGET_FILE_DIR:CCHIP8-EMULATOR>
 	COMMAND ${CMAKE_COMMAND} -E copy
-        ${PROJECT_SOURCE_DIR}/assets/arial_font.ttf $<TARGET_FILE_DIR:CCHIP8-EMULATOR>/resource
+        ${PROJECT_SOURCE_DIR}/assets/arial_font.ttf $<TARGET_FILE_DIR:CCHIP8-EMULATOR>/resources
 )
 
 target_include_directories(CCHIP8-EMULATOR PRIVATE ${INCLUDE_DIR})
