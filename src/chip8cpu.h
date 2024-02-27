@@ -13,7 +13,7 @@ struct chip8cpu
 {
 	chip8cpu();
 
-	inline void resetCPU();
+	void resetCPU();
 
 	void updateTimers(unsigned int FPS);
 
