@@ -1,10 +1,5 @@
 #include "ProgramManager.h"
 
-#ifndef _DEBUG
-#define DEBUG(x)
-#endif // DEBUG
-#define DEBUG(x) std::cout << x << "\n"
-
 ProgramManager::ProgramManager(chip8cpu& cpu, Memory& mem, DisplayManager& display)
 	: m_cpu(cpu), m_memory(mem), m_display(display), m_windowEvent() {}
 
