@@ -1,4 +1,4 @@
-This is a virtual machine of [CHIP-8](https://en.wikipedia.org/wiki/CHIP-8) created in C++.
+This is a virtual machine of [CHIP-8](https://en.wikipedia.org/wiki/CHIP-8) written in C++.
 
 ## Getting started
 > [!IMPORTANT]
