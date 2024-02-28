@@ -8,4 +8,4 @@ This virtual machine features CHIP-8 graphics and sounds.
 It also contains several keys with special uses which are explained in [this file](instructions.md).
 
 
-Documentation on the opcodes were obtained from this website: https://tonisagrista.com/blog/2021/chip8-spec/
+The opcode documentation was obtained from this website: https://tonisagrista.com/blog/2021/chip8-spec/
