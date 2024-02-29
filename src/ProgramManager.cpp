@@ -153,8 +153,6 @@ void ProgramManager::execute(Instruction& instruction)
 
 	bool collision = false;
 
-	/* Instructions documentation: https://tonisagrista.com/blog/2021/chip8-spec */
-
 	switch (instruction.FirstQuarter)
 	{
 	case 0x0:
