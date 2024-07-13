@@ -12,6 +12,8 @@
 #define FILL_WIDTH	14
 #define FILL_HEIGHT	8
 
+#define WIN_ARIAL_FONT_DIR "C:\\Windows\\Font\\arial.ttf"
+
 /* PIXEL OFFSET */
 #define OFFSET	16
 
