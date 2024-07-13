@@ -36,8 +36,6 @@ set(SOURCE_FILES
 
 add_executable(CCHIP8-EMULATOR ${SOURCE_FILES})
 
-file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/Release/resources")
-
 add_custom_command(
     TARGET CCHIP8-EMULATOR POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy
