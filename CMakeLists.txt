@@ -44,8 +44,6 @@ add_custom_command(
         ${LIB_DIR}/SDL2.dll $<TARGET_FILE_DIR:CCHIP8-EMULATOR>
 	COMMAND ${CMAKE_COMMAND} -E copy
         ${LIB_DIR}/SDL2_ttf.dll $<TARGET_FILE_DIR:CCHIP8-EMULATOR>
-	COMMAND ${CMAKE_COMMAND} -E copy
-        ${PROJECT_SOURCE_DIR}/assets/arial_font.ttf $<TARGET_FILE_DIR:CCHIP8-EMULATOR>/resources
 )
 
 target_include_directories(CCHIP8-EMULATOR PRIVATE ${INCLUDE_DIR})
