@@ -230,7 +230,7 @@ void DisplayManager::DisplayQuit()
 
 void DisplayManager::loadFont()
 {
-	m_font = TTF_OpenFont("resources\\arial_font.ttf", 72);
+	m_font = TTF_OpenFont(WIN_ARIAL_FONT_DIR, 72);
 
 	if (m_font == NULL)
 	{
