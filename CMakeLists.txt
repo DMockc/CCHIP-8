@@ -34,7 +34,7 @@ set(SOURCE_FILES
 	${SOURCE_DIR}/ProgramManager.h
 )
 
-add_executable(CCHIP8-EMULATOR ${SOURCE_FILES})
+add_executable(CCHIP8-EMULATOR WIN32 ${SOURCE_FILES})
 
 add_custom_command(
     TARGET CCHIP8-EMULATOR POST_BUILD
