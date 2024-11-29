@@ -1,5 +1,7 @@
 #include "DisplayManager.h"
 
+uint64_t DisplayMatrix::matrix[HEIGHT];
+
 dTEXT::dTEXT(const char* content, int x, int y, SDL_Color color, bool blend)
 	: t_content(content),
 	x(x), y(y),
@@ -8,7 +10,7 @@ dTEXT::dTEXT(const char* content, int x, int y, SDL_Color color, bool blend)
 	blend(blend),
 	textPlace({x, y, 112, 52}) {}
 
-DRW_COORD::DRW_COORD(uByte x, uByte y, bool color)
+DRW_COORD::DRW_COORD(uByte y, uByte x, bool color)
 	: x_coord(x), y_coord(y)
 {
 	if (color == 1)
@@ -29,8 +31,41 @@ void waitFPS(Uint32 delta, Uint32 desiredDelta)
 	}
 }
 
+bool DisplayMatrix::get(uint64_t i, uint64_t j)
+{
+	if (i < 0 || i >= HEIGHT || j < 0 || j >= WIDTH)
+	{
+		throw std::out_of_range("Index is out of range");
+	}
+
+	uint64_t mask = 1;
+	mask <<= 63 - j;
+	
+	return DisplayMatrix::matrix[i] & mask;
+}
+
+void DisplayMatrix::set(uint64_t i, uint64_t j, bool value)
+{
+	if (i < 0 || i >= HEIGHT || j < 0 || j >= WIDTH)
+	{
+		throw std::out_of_range("Index is out of range");
+	}
+
+	uint64_t mask = 1;
+	mask <<= 63 - j;
+
+	if (value == 0)
+	{
+		DisplayMatrix::matrix[i] &= ~mask;
+	}
+	else
+	{
+		DisplayMatrix::matrix[i] |= mask;
+	}
+}
+
 DisplayManager::DisplayManager()
-	: renderer(nullptr), m_window(nullptr), m_text(nullptr), m_font(nullptr), screenMatrix()
+	: renderer(nullptr), m_window(nullptr), m_text(nullptr), m_font(nullptr)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) < NULL)
 	{
@@ -82,7 +117,7 @@ void DisplayManager::clearDisplay()
 	{
 		for (int j = 0; j < WIDTH; j++)
 		{
-			screenMatrix[i][j] = 0;
+			DisplayMatrix::set(i, j, 0);
 		}
 	}
 }
@@ -158,7 +193,7 @@ void DisplayManager::fillTextPlace(dTEXT& text)
 		{
 			if (text.blend)
 			{
-				alpha = screenMatrix[i][j] * 0xFF;
+				alpha = DisplayMatrix::get(i, j) * 0xFF;
 			}
 			else
 			{
@@ -166,9 +201,9 @@ void DisplayManager::fillTextPlace(dTEXT& text)
 			}
 
 			SDL_SetRenderDrawColor(renderer,
-				screenMatrix[i][j] * 0xFF,
-				screenMatrix[i][j] * 0xFF,
-				screenMatrix[i][j] * 0xFF,
+				DisplayMatrix::get(i, j) * 0xFF,
+				DisplayMatrix::get(i, j) * 0xFF,
+				DisplayMatrix::get(i, j) * 0xFF,
 				alpha
 			);
 
@@ -230,17 +265,17 @@ void DisplayManager::DisplayQuit()
 
 void DisplayManager::loadFont()
 {
-	m_font = TTF_OpenFont(WIN_ARIAL_FONT_DIR, 72);
+	m_font = TTF_OpenFont("arial_font.ttf", 72);
 
 	if (m_font == NULL)
 	{
 		std::cerr << "Couldn't load font: " << TTF_GetError() << "\n";
+		"Please make sure that the file \"arial_font.tff\" is in the folder \"resources\"\n";
 		SDL_DestroyRenderer(renderer);
 		SDL_DestroyWindow(m_window);
 		TTF_Quit();
 		SDL_Quit();
 	}
-
 }
 
 void DisplayManager::clearTextPlace(dTEXT& text)

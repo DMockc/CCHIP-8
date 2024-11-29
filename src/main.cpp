@@ -1,4 +1,5 @@
 #include "ProgramManager.h"
+
 int main(int argc, char** argv)
 {
 	chip8cpu cpu;

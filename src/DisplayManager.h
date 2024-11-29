@@ -3,6 +3,7 @@
 #include "../include/SDL_ttf.h"
 #include <vector>
 #include <iostream>
+#include <type_traits>
 
 #define WHITE	255, 255, 255, 255
 #define BLACK	0, 0, 0, 255
@@ -11,8 +12,6 @@
 #define HEIGHT	32
 #define FILL_WIDTH	14
 #define FILL_HEIGHT	8
-
-#define WIN_ARIAL_FONT_DIR "C:\\Windows\\Fonts\\arial.ttf"
 
 /* PIXEL OFFSET */
 #define OFFSET	16
@@ -43,6 +42,13 @@ struct DRW_COORD
 	uByte x_coord;
 	uByte y_coord;
 	SDL_Color pixel_color;
+}; 
+
+namespace DisplayMatrix
+{
+	bool get(uint64_t i, uint64_t j);
+	void set(uint64_t i, uint64_t j, bool value);
+	extern uint64_t matrix[HEIGHT];
 };
 
 void waitFPS(Uint32 delta, Uint32 desiredDelta);
@@ -63,7 +69,6 @@ public:
 
 	SDL_Renderer* renderer;
 
-	bool screenMatrix[HEIGHT][WIDTH];
 	std::vector<DRW_COORD> coords_buffer;
 private:
 	void loadFont();
